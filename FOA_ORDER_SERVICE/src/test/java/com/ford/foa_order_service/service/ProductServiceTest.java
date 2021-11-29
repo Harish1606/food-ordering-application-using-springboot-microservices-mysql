@@ -16,6 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class ProductServiceTest {
 
+    String valid_token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJpcyIsImV4cCI6MTYzODIyMTc1MSwiaWF0IjoxNjM4MTg1NzUxfQ.jweSBxUVYsi_YRFWNm2u8QTEXHvuaBrmOAD85jzdKQA";
+
+    String expired_token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIYXJpc2giLCJleHAiOjE2Mzc2MTc2MjAsImlhdCI6MTYzNzU4MTYyMH0.4MbKnHLf_hCF9GqI_8VomCGrcuTAjDWzEzCwftZiQ5g";
+
     @Autowired
     private ProductService productService;
 
@@ -33,11 +37,8 @@ class ProductServiceTest {
         //given
         Product product = new Product(0,"Chicken Fried Rice",150,"made with hygiened ingredients",5);
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2FzaCIsImV4cCI6MTYzNzg2OTMxMiwiaWF0IjoxNjM3ODMzMzEyfQ.U4rtaJxh-X7mJkvU22ngJBlCwto2bA4vnXtHrvdSj3A";
-
         //then
-        assertNotNull(productService.addProduct(product,token));
+        assertNotNull(productService.addProduct(product,valid_token));
     }
 
     @Test
@@ -45,11 +46,8 @@ class ProductServiceTest {
         //given
         Product product = new Product(0,"Chicken Fried Rice",150,"made with hygiened ingredients",12);
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2FzaCIsImV4cCI6MTYzNzg2OTMxMiwiaWF0IjoxNjM3ODMzMzEyfQ.U4rtaJxh-X7mJkvU22ngJBlCwto2bA4vnXtHrvdSj3A";
-
         //then
-        Exception exception = assertThrows(Exception.class, () -> productService.addProduct(product,token));
+        Exception exception = assertThrows(Exception.class, () -> productService.addProduct(product,valid_token));
     }
 
     @Test
@@ -57,11 +55,8 @@ class ProductServiceTest {
         //given
         Product product = new Product(0,"Chicken Noodles",150,"made with hygiened ingredients",5);
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIYXJpc2giLCJleHAiOjE2Mzc2MTc2MjAsImlhdCI6MTYzNzU4MTYyMH0.4MbKnHLf_hCF9GqI_8VomCGrcuTAjDWzEzCwftZiQ5g";
-
         //then
-        Exception exception = assertThrows(Exception.class, () -> productService.addProduct(product,token));
+        Exception exception = assertThrows(Exception.class, () -> productService.addProduct(product,expired_token));
     }
 
     @SneakyThrows
@@ -70,11 +65,8 @@ class ProductServiceTest {
         //given
         Integer hotelId = 5;
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2FzaCIsImV4cCI6MTYzNzg2OTMxMiwiaWF0IjoxNjM3ODMzMzEyfQ.U4rtaJxh-X7mJkvU22ngJBlCwto2bA4vnXtHrvdSj3A";
-
         //then
-        assertNotNull(productService.getProductsByHotelId(hotelId,token));
+        assertNotNull(productService.getProductsByHotelId(hotelId,valid_token));
     }
 
     @SneakyThrows
@@ -84,11 +76,8 @@ class ProductServiceTest {
         Integer hotelId = 12;
         List<Product> productList = new ArrayList<Product>();
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2FzaCIsImV4cCI6MTYzNzg2OTMxMiwiaWF0IjoxNjM3ODMzMzEyfQ.U4rtaJxh-X7mJkvU22ngJBlCwto2bA4vnXtHrvdSj3A";
-
         //then
-        assertEquals(productList,productService.getProductsByHotelId(hotelId,token));
+        assertEquals(productList,productService.getProductsByHotelId(hotelId,valid_token));
     }
 
     @Test
@@ -96,11 +85,8 @@ class ProductServiceTest {
         //given
         Integer hotelId = 5;
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIYXJpc2giLCJleHAiOjE2Mzc2MTc2MjAsImlhdCI6MTYzNzU4MTYyMH0.4MbKnHLf_hCF9GqI_8VomCGrcuTAjDWzEzCwftZiQ5g";
-
         //then
-        Exception exception = assertThrows(Exception.class, () -> productService.getProductsByHotelId(hotelId,token));
+        Exception exception = assertThrows(Exception.class, () -> productService.getProductsByHotelId(hotelId,expired_token));
     }
 
     @SneakyThrows
@@ -109,11 +95,8 @@ class ProductServiceTest {
         //given
         Integer productId = 11;
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2FzaCIsImV4cCI6MTYzNzg2OTMxMiwiaWF0IjoxNjM3ODMzMzEyfQ.U4rtaJxh-X7mJkvU22ngJBlCwto2bA4vnXtHrvdSj3A";
-
         //then
-        assertNotNull(productService.getProductById(productId,token));
+        assertNotNull(productService.getProductById(productId,valid_token));
     }
 
     @Test
@@ -121,11 +104,8 @@ class ProductServiceTest {
         //given
         Integer productId = 25;
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2FzaCIsImV4cCI6MTYzNzg2OTMxMiwiaWF0IjoxNjM3ODMzMzEyfQ.U4rtaJxh-X7mJkvU22ngJBlCwto2bA4vnXtHrvdSj3A";
-
         //then
-        Exception exception = assertThrows(Exception.class, () -> productService.getProductById(productId,token));
+        Exception exception = assertThrows(Exception.class, () -> productService.getProductById(productId,valid_token));
     }
 
     @Test
@@ -133,11 +113,8 @@ class ProductServiceTest {
         //given
         Integer productId = 11;
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIYXJpc2giLCJleHAiOjE2Mzc2MTc2MjAsImlhdCI6MTYzNzU4MTYyMH0.4MbKnHLf_hCF9GqI_8VomCGrcuTAjDWzEzCwftZiQ5g";
-
         //then
-        Exception exception = assertThrows(Exception.class, () -> productService.getProductById(productId,token));
+        Exception exception = assertThrows(Exception.class, () -> productService.getProductById(productId,expired_token));
     }
 
 }

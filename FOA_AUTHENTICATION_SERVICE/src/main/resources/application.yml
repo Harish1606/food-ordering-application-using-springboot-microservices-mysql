@@ -3,6 +3,14 @@ spring:
     url: jdbc:mysql://localhost:3306/FOA_DB
     username: root
     password: Harish@1606
+  #h2:
+    #console:
+      #enabled: true
+  #datasource:
+    #url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1
+    #username: ha
+    #password:
+    #driver-class-name: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: update

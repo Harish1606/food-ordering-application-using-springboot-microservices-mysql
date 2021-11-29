@@ -21,13 +21,13 @@ public class HotelController {
 
     @PostMapping("/addHotel")
     public Hotel addHotel(@RequestBody Hotel hotel) throws Exception{
-        String token = httpServletRequest.getHeader("Authorization");
-        return hotelService.addHotel(hotel,token);
+        String authorizationHeader = httpServletRequest.getHeader("Authorization");
+        return hotelService.addHotel(hotel,authorizationHeader);
     }
 
     @GetMapping("/getAllHotels")
     public List<Hotel> getAllHotels() throws Exception{
-        String token = httpServletRequest.getHeader("Authorization");
-        return hotelService.getAllHotels(token);
+        String authorizationHeader = httpServletRequest.getHeader("Authorization");
+        return hotelService.getAllHotels(authorizationHeader);
     }
 }

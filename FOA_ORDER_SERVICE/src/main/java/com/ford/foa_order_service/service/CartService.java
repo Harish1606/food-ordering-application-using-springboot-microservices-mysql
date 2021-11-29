@@ -3,6 +3,7 @@ package com.ford.foa_order_service.service;
 import com.ford.foa_order_service.model.Cart;
 import com.ford.foa_order_service.model.User;
 import com.ford.foa_order_service.repository.CartRepository;
+import com.ford.foa_order_service.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
@@ -22,6 +23,9 @@ public class CartService {
     private CartRepository cartRepository;
 
     @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
     @Lazy
     private RestTemplate restTemplate;
 
@@ -36,22 +40,32 @@ public class CartService {
         return user;
     }
 
-    public Cart addProductToCart(Cart cart,String token) throws Exception{
-        User user = verifyToken(token);
+    public boolean isTokenExpired(String authorizationHeader){
+        if(authorizationHeader!=null && authorizationHeader.startsWith("Bearer ")){
+            String token = authorizationHeader.substring(7);
+            return jwtUtil.isTokenExpired(token);
+        }
+        return true;
+    }
+
+    public Cart addProductToCart(Cart cart,String authorizationHeader) throws Exception{
+        User user = verifyToken(authorizationHeader);
         cart.setUserId(user.getUserId());
         return cartRepository.save(cart);
     }
 
-    public List<Cart> getCartDetailsByUserId(String token) throws Exception{
-        User user = verifyToken(token);
+    public List<Cart> getCartDetailsByUserId(String authorizationHeader) throws Exception{
+        User user = verifyToken(authorizationHeader);
         List<Cart> cartListByUserId = cartRepository.findCartsByUserId(user.getUserId());
         return cartListByUserId;
     }
 
-    public String deleteCartById(Integer id,String token) throws Exception{
-        User user = verifyToken(token);
-        Cart cart=cartRepository.findById(id).orElseThrow(() -> new Exception("Product is not present in the cart"));
-        cartRepository.delete(cart);
-        return "Product removed from the cart successfully";
+    public String deleteCartById(Integer id,String authorizationHeader) throws Exception{
+        if(!isTokenExpired(authorizationHeader)){
+            Cart cart=cartRepository.findById(id).orElseThrow(() -> new Exception("Product is not present in the cart"));
+            cartRepository.delete(cart);
+            return "Product removed from the cart successfully";
+        }
+        throw new Exception("Access denied");
     }
 }

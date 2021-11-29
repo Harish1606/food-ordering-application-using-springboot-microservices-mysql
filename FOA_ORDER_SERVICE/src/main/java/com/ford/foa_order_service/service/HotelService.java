@@ -1,16 +1,10 @@
 package com.ford.foa_order_service.service;
 
 import com.ford.foa_order_service.model.Hotel;
-import com.ford.foa_order_service.model.User;
 import com.ford.foa_order_service.repository.HotelRepository;
+import com.ford.foa_order_service.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -21,27 +15,27 @@ public class HotelService {
     private HotelRepository hotelRepository;
 
     @Autowired
-    @Lazy
-    private RestTemplate restTemplate;
+    private JwtUtil jwtUtil;
 
-    public User verifyToken(String token){
-        String verify_token_url = "http://AUTHENTICATION-SERVICE/authentication/verifyToken";
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-type", "application/json");
-        headers.add("Authorization",token);
-        HttpEntity request=new HttpEntity(headers);
-        ResponseEntity<User> response = restTemplate.exchange(verify_token_url, HttpMethod.GET, request, User.class);
-        User user=response.getBody();
-        return user;
+    public boolean isTokenExpired(String authorizationHeader){
+        if(authorizationHeader!=null && authorizationHeader.startsWith("Bearer ")){
+            String token = authorizationHeader.substring(7);
+            return jwtUtil.isTokenExpired(token);
+        }
+        return true;
     }
 
-    public Hotel addHotel(Hotel hotel,String token) throws Exception{
-        User user = verifyToken(token);
-        return hotelRepository.save(hotel);
+    public Hotel addHotel(Hotel hotel,String authorizationHeader) throws Exception{
+        if(!isTokenExpired(authorizationHeader)) {
+            return hotelRepository.save(hotel);
+        }
+        throw new Exception("Access denied");
     }
 
-    public List<Hotel> getAllHotels(String token) throws Exception{
-        User user = verifyToken(token);
-        return hotelRepository.findAll();
+    public List<Hotel> getAllHotels(String authorizationHeader) throws Exception{
+        if(!isTokenExpired(authorizationHeader)){
+            return hotelRepository.findAll();
+        }
+        throw new Exception("Access denied");
     }
 }

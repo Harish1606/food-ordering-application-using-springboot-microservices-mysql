@@ -13,6 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class HotelServiceTest {
 
+    String valid_token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJpcyIsImV4cCI6MTYzODIyMTc1MSwiaWF0IjoxNjM4MTg1NzUxfQ.jweSBxUVYsi_YRFWNm2u8QTEXHvuaBrmOAD85jzdKQA";
+
+    String expired_token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIYXJpc2giLCJleHAiOjE2Mzc2MTc2MjAsImlhdCI6MTYzNzU4MTYyMH0.4MbKnHLf_hCF9GqI_8VomCGrcuTAjDWzEzCwftZiQ5g";
+
     @Autowired
     private HotelService hotelService;
 
@@ -30,11 +34,8 @@ class HotelServiceTest {
         //given
         Hotel hotel = new Hotel(0,"Fisherman's fare","8984092093","Annanagar chennai");
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2FzaCIsImV4cCI6MTYzNzg2OTMxMiwiaWF0IjoxNjM3ODMzMzEyfQ.U4rtaJxh-X7mJkvU22ngJBlCwto2bA4vnXtHrvdSj3A";
-
         //then
-        assertNotNull(hotelService.addHotel(hotel,token));
+        assertNotNull(hotelService.addHotel(hotel,valid_token));
     }
 
     @Test
@@ -42,29 +43,20 @@ class HotelServiceTest {
         //given
         Hotel hotel = new Hotel(0,"Fisherman's fare","8984092093","Annanagar chennai");
 
-        //when
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIYXJpc2giLCJleHAiOjE2Mzc2MTc2MjAsImlhdCI6MTYzNzU4MTYyMH0.4MbKnHLf_hCF9GqI_8VomCGrcuTAjDWzEzCwftZiQ5g";
-
         //then
-        Exception exception = assertThrows(Exception.class, () -> hotelService.addHotel(hotel,token));
+        Exception exception = assertThrows(Exception.class, () -> hotelService.addHotel(hotel,expired_token));
     }
 
     @Test
     @SneakyThrows
     void shouldReturnAllHotelsIfTokenIsValid() {
-        //given
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha2FzaCIsImV4cCI6MTYzNzg2OTMxMiwiaWF0IjoxNjM3ODMzMzEyfQ.U4rtaJxh-X7mJkvU22ngJBlCwto2bA4vnXtHrvdSj3A";
-
         //then
-        assertNotNull(hotelService.getAllHotels(token));
+        assertNotNull(hotelService.getAllHotels(valid_token));
     }
 
     @Test
     void shouldThrowExceptionInGetAllHotelsIfTokenIsExpired() {
-        //given
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJIYXJpc2giLCJleHAiOjE2Mzc2MTc2MjAsImlhdCI6MTYzNzU4MTYyMH0.4MbKnHLf_hCF9GqI_8VomCGrcuTAjDWzEzCwftZiQ5g";
-
         //then
-        Exception exception = assertThrows(Exception.class, () -> hotelService.getAllHotels(token));
+        Exception exception = assertThrows(Exception.class, () -> hotelService.getAllHotels(expired_token));
     }
 }
