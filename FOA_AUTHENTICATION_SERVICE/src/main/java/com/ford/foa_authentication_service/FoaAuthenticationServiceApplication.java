@@ -11,5 +11,4 @@ public class FoaAuthenticationServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(FoaAuthenticationServiceApplication.class, args);
     }
-
 }

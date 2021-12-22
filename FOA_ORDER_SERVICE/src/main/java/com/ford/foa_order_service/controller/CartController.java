@@ -20,21 +20,21 @@ public class CartController {
     private HttpServletRequest httpServletRequest;
 
     @PostMapping("/addProductToCart")
-    public Cart addProductToCart(@RequestBody Cart cart) throws Exception{
+    public Cart addProductToCart(@RequestBody Cart cart) throws Exception {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
-        return cartService.addProductToCart(cart,authorizationHeader);
+        return cartService.addProductToCart(cart, authorizationHeader);
     }
 
     @GetMapping("/getCartDetailsByUserId")
-    public List<Cart> getCartDetailsByUserId() throws Exception{
+    public List<Cart> getCartDetailsByUserId() throws Exception {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         return cartService.getCartDetailsByUserId(authorizationHeader);
     }
 
     @DeleteMapping("/deleteCart/{id}")
-    public String deleteCartById(@PathVariable Integer id) throws Exception{
+    public String deleteCartById(@PathVariable Integer id) throws Exception {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
-        return cartService.deleteCartById(id,authorizationHeader);
+        return cartService.deleteCartById(id, authorizationHeader);
     }
 
 }

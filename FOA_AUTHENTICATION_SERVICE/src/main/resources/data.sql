@@ -1,0 +1,1 @@
+INSERT INTO USER_TABLE VALUES(10,'akash@gmail.com','akash','9829203230','chennai','akash');

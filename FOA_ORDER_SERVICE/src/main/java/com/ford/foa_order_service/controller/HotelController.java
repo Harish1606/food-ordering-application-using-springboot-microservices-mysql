@@ -20,13 +20,13 @@ public class HotelController {
     private HttpServletRequest httpServletRequest;
 
     @PostMapping("/addHotel")
-    public Hotel addHotel(@RequestBody Hotel hotel) throws Exception{
+    public Hotel addHotel(@RequestBody Hotel hotel) throws Exception {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
-        return hotelService.addHotel(hotel,authorizationHeader);
+        return hotelService.addHotel(hotel, authorizationHeader);
     }
 
     @GetMapping("/getAllHotels")
-    public List<Hotel> getAllHotels() throws Exception{
+    public List<Hotel> getAllHotels() throws Exception {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
         return hotelService.getAllHotels(authorizationHeader);
     }

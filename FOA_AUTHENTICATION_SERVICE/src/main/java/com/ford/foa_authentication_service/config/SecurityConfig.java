@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 
@@ -45,9 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers("/authentication/userLogin")
-                .permitAll().and().authorizeRequests().antMatchers("/authentication/userRegister").permitAll().anyRequest().authenticated()
+                .permitAll().and().authorizeRequests().antMatchers("/authentication/userRegister")
+                .permitAll().and().authorizeRequests().antMatchers("/h2-console/**").permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.headers().frameOptions().sameOrigin();
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

@@ -20,21 +20,21 @@ public class ProductController {
     private HttpServletRequest httpServletRequest;
 
     @PostMapping("/addProduct")
-    public Product addProduct(@RequestBody Product product) throws Exception{
+    public Product addProduct(@RequestBody Product product) throws Exception {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
-        return productService.addProduct(product,authorizationHeader);
+        return productService.addProduct(product, authorizationHeader);
     }
 
     @GetMapping("/getProductsByHotelId/{id}")
-    public List<Product> getProductsByHotelId(@PathVariable Integer id) throws Exception{
+    public List<Product> getProductsByHotelId(@PathVariable Integer id) throws Exception {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
-        return productService.getProductsByHotelId(id,authorizationHeader);
+        return productService.getProductsByHotelId(id, authorizationHeader);
     }
 
     @GetMapping("/getProduct/{id}")
-    public Product getProductById(@PathVariable Integer id) throws Exception{
+    public Product getProductById(@PathVariable Integer id) throws Exception {
         String authorizationHeader = httpServletRequest.getHeader("Authorization");
-        return productService.getProductById(id,authorizationHeader);
+        return productService.getProductById(id, authorizationHeader);
     }
 
 }

@@ -20,24 +20,36 @@ public class UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public String userRegister(User user) throws Exception{
-        User userByEmailId=userRepository.findByEmailId(user.getEmailId());
-        if(userByEmailId!=null){
+    public User verifyToken(String authorizationHeader) {
+        String token = null;
+        String userName = null;
+        User user = null;
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            token = authorizationHeader.substring(7);
+            userName = jwtUtil.extractUsername(token);
+            user = userRepository.findByUserName(userName);
+        }
+        return user;
+    }
+
+    public String userRegister(User user) throws Exception {
+        User userByEmailId = userRepository.findByEmailId(user.getEmailId());
+        if (userByEmailId != null) {
             throw new Exception("Email id already exists");
         }
-        User userByUserName=userRepository.findByUserName(user.getUserName());
-        if(userByUserName!=null){
+        User userByUserName = userRepository.findByUserName(user.getUserName());
+        if (userByUserName != null) {
             throw new Exception("Username already exists");
         }
         userRepository.save(user);
         return jwtUtil.generateToken(user.getUserName());
     }
 
-    public String userLogin(User user) throws Exception{
+    public String userLogin(User user) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(),user.getPassword()));
-        }
-        catch (Exception e){
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
+        } catch (Exception e) {
             throw new Exception("Invalid username or password");
         }
         return jwtUtil.generateToken(user.getUserName());

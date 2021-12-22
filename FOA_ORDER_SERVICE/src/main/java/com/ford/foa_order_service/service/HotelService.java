@@ -17,23 +17,15 @@ public class HotelService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public boolean isTokenExpired(String authorizationHeader){
-        if(authorizationHeader!=null && authorizationHeader.startsWith("Bearer ")){
-            String token = authorizationHeader.substring(7);
-            return jwtUtil.isTokenExpired(token);
-        }
-        return true;
-    }
-
-    public Hotel addHotel(Hotel hotel,String authorizationHeader) throws Exception{
-        if(!isTokenExpired(authorizationHeader)) {
+    public Hotel addHotel(Hotel hotel, String authorizationHeader) throws Exception {
+        if (!jwtUtil.isTokenExpired(authorizationHeader)) {
             return hotelRepository.save(hotel);
         }
         throw new Exception("Access denied");
     }
 
-    public List<Hotel> getAllHotels(String authorizationHeader) throws Exception{
-        if(!isTokenExpired(authorizationHeader)){
+    public List<Hotel> getAllHotels(String authorizationHeader) throws Exception {
+        if (!jwtUtil.isTokenExpired(authorizationHeader)) {
             return hotelRepository.findAll();
         }
         throw new Exception("Access denied");

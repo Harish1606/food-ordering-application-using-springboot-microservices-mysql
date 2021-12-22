@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Hotel {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int hotel_id;
     private String hotel_name;
     private String hotel_number;
